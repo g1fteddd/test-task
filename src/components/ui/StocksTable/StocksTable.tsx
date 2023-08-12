@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./StocksTable.module.scss";
 import { IStock } from "../../../redux/stocks/types";
+import { Droppable, Draggable } from "react-beautiful-dnd";
 
 interface ITableProps {
     data: IStock[];
@@ -21,17 +22,37 @@ const StocksTable: React.FC<ITableProps> = ({ data, columns }) => {
                         ))}
                     </tr>
                 </thead>
-                <tbody>
-                    {data.map((rows) => (
-                        <tr key={rows.symbol} draggable={true}>
-                            <td>{rows.symbol}</td>
-                            <td>{rows.companyName}</td>
-                            <td>{rows.currency}</td>
-                            <td>{rows.avgTotalVolume}</td>
-                            <td>{rows.latestPrice}</td>
-                        </tr>
-                    ))}
-                </tbody>
+                <Droppable droppableId="stocks">
+                    {(provided) => (
+                        <tbody
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                        >
+                            {data.map((rows, index) => (
+                                <Draggable
+                                    key={rows.symbol}
+                                    draggableId={rows.symbol}
+                                    index={index}
+                                >
+                                    {(provided) => (
+                                        <tr
+                                            ref={provided.innerRef}
+                                            {...provided.dragHandleProps}
+                                            {...provided.draggableProps}
+                                        >
+                                            <td>{rows.symbol}</td>
+                                            <td>{rows.companyName}</td>
+                                            <td>{rows.currency}</td>
+                                            <td>{rows.avgTotalVolume}</td>
+                                            <td>{rows.latestPrice}</td>
+                                        </tr>
+                                    )}
+                                </Draggable>
+                            ))}
+                            {provided.placeholder}
+                        </tbody>
+                    )}
+                </Droppable>
             </table>
         </div>
     );

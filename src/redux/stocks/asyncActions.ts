@@ -9,7 +9,6 @@ export const fetchStocks = createAsyncThunk("stocks/fetchStocks", async () => {
         {
             params: {
                 token: "pk_094f3048c02145189be87b8dc41de0cd",
-                // TODO: исправить на 200
                 listLimit: 200,
             },
         }

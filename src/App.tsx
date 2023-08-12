@@ -1,16 +1,17 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useAppDispatch } from "./redux/store";
 import { fetchStocks } from "./redux/stocks/asyncActions";
 import { useSelector } from "react-redux";
 import { stocksSelector } from "./redux/stocks/selectors";
-import Table from "./components/ui/StocksTable";
+import StocksTable from "./components/ui/StocksTable";
 import { IStock } from "./redux/stocks/types";
 import Pagination from "./components/ui/Pagination";
 import { paginate } from "./utils/paginate";
 import { filtersSelector } from "./redux/filters/selectors";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { setStocks } from "./redux/stocks/slice";
 
-function App() {
+const App: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const { stocks } = useSelector(stocksSelector);
@@ -41,17 +42,36 @@ function App() {
 
     useEffect(() => {
         dispatch(fetchStocks());
-    }, []);
+    }, [dispatch]);
+
+    const onDragEnd = (result: DropResult) => {
+        if (!result.destination) {
+            return;
+        }
+        const items = [...stocks];
+        const [reorderedItem] = items.splice(
+            result.source.index + pagination.limit * (pagination.page - 1),
+            1
+        );
+        items.splice(
+            result.destination.index + pagination.limit * (pagination.page - 1),
+            0,
+            reorderedItem
+        );
+        dispatch(setStocks(items));
+    };
 
     const stocksCrop = paginate(stocks, pagination.page, pagination.limit);
 
     return (
         <div>
             <h1 className="title">Top 200 most active stocks</h1>
-            <Table data={stocksCrop} columns={columns} />
+            <DragDropContext onDragEnd={onDragEnd}>
+                <StocksTable data={stocksCrop} columns={columns} />
+            </DragDropContext>
             <Pagination />
         </div>
     );
-}
+};
 
 export default App;
