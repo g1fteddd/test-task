@@ -1,4 +1,4 @@
-import { IStock } from "../redux/stocks/types";
+import { IStock } from "../../redux/stocks/types";
 
 export function paginate(
     items: IStock[],
