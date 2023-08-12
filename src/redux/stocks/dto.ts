@@ -6,7 +6,6 @@ export class StocksDto implements IStock {
     currency: string;
     avgTotalVolume: number;
     latestPrice: number;
-    latestVolume: number;
 
     constructor(data: IStock) {
         this.symbol = data.symbol;
@@ -14,6 +13,5 @@ export class StocksDto implements IStock {
         this.currency = data.currency;
         this.avgTotalVolume = data.avgTotalVolume;
         this.latestPrice = data.latestPrice;
-        this.latestVolume = data.latestVolume;
     }
 }

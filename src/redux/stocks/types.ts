@@ -10,7 +10,6 @@ export interface IStock {
     currency: string;
     avgTotalVolume: number;
     latestPrice: number;
-    latestVolume: number;
 }
 
 export interface IStocksState {

@@ -23,7 +23,8 @@ const stocksSlice = createSlice({
             (state, action: PayloadAction<IStock[]>) => {
                 state.stocks = action.payload;
                 state.status = Status.SUCCESS;
-                state.totalCount = 200;
+
+                state.totalCount = action.payload.length;
             }
         );
         builder.addCase(fetchStocks.rejected, (state) => {
