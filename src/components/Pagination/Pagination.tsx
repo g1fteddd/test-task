@@ -1,31 +1,23 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./Pagination.module.scss";
-import { useAppDispatch } from "../../../redux/store";
+import { useAppDispatch } from "../../redux/store";
 import { useSelector } from "react-redux";
-import { filtersSelector } from "../../../redux/filters/selectors";
-import { stocksSelector } from "../../../redux/stocks/selectors";
-import range from "lodash.range";
-import { setPagination } from "../../../redux/filters/slice";
+import { filtersSelector } from "../../redux/filters/selectors";
+import { stocksSelector } from "../../redux/stocks/selectors";
+import { setPagination } from "../../redux/filters/slice";
+import { rangePagination } from "../../utils/rangePagination/rangePagination";
 
 const Pagination: React.FC = () => {
     const dispatch = useAppDispatch();
     const { pagination } = useSelector(filtersSelector);
 
     const { totalCount } = useSelector(stocksSelector);
-    const pageCount = Math.ceil(totalCount / pagination.limit);
 
-    let pages;
+    const pageCount = useMemo(() => {
+        return Math.ceil(totalCount / pagination.limit);
+    }, [totalCount, pagination.limit]);
 
-    if (pagination.page === 1 || pagination.page === 2) {
-        pages = range(1, 4);
-    } else if (
-        pagination.page === pageCount - 1 ||
-        pagination.page === pageCount
-    ) {
-        pages = range(pageCount - 2, pageCount + 1);
-    } else {
-        pages = range(pagination.page - 1, pagination.page + 2);
-    }
+    let pages = rangePagination(pageCount, pagination.page);
 
     const handleClick = (newPage: number) => {
         dispatch(setPagination({ page: newPage, limit: 5 }));

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./StocksTable.module.scss";
-import { IStock } from "../../../redux/stocks/types";
+import { IStock } from "../../redux/stocks/types";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 
 interface ITableProps {
