@@ -8,7 +8,7 @@ export const fetchStocks = createAsyncThunk("stocks/fetchStocks", async () => {
         "https://cloud.iexapis.com/stable/stock/market/list/mostactive",
         {
             params: {
-                token: "pk_094f3048c02145189be87b8dc41de0cd",
+                token: "YOUR_TOKEN_HERE",
                 listLimit: 200,
             },
         }

@@ -14,7 +14,7 @@ import { setStocks } from "./redux/stocks/slice";
 const App: React.FC = () => {
     const dispatch = useAppDispatch();
 
-    const { stocks } = useSelector(stocksSelector);
+    const { stocks, totalCount } = useSelector(stocksSelector);
     const { pagination } = useSelector(filtersSelector);
 
     const columns: { Header: string; accessor: keyof IStock }[] = [
@@ -65,11 +65,11 @@ const App: React.FC = () => {
 
     return (
         <div>
-            <h1 className="title">Top 200 most active stocks</h1>
+            <h1 className="title">Top {totalCount} most active stocks</h1>
             <DragDropContext onDragEnd={onDragEnd}>
                 <StocksTable data={stocksCrop} columns={columns} />
             </DragDropContext>
-            <Pagination />
+            {totalCount !== 0 && <Pagination />}
         </div>
     );
 };
